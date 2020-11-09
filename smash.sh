@@ -182,7 +182,7 @@ fi
 
 # verify state
 if ! diff "$STATE" "$SMASH_DIR/engine/state.$PLAN_DATE"; then
-	error "Inconsistent state"
+	error "-fatal inconsistent state"
 fi
 
 # apply
