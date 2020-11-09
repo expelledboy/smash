@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo ! determining system existing
+echo INSTALLED="$(bool test -d ./target 2>/dev/null)"
+if [[ -n $INSTALLED ]]; then
+	echo VERSION="$(cat ./target/version)"
+fi
+echo ! state known

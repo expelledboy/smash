@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo ! inspect running state
+env -u output | grep 'INSTALLED'
+env | grep PWD
+echo ! excute work
+mkdir -p ./target
+date >./target/version
+echo ! job successful

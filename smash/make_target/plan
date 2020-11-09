@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo ! checking loaded state
+env -u output | grep 'INSTALLED'
+echo ! developing plan
+if isFalse "$INSTALLED"; then
+	echo run smash/make_target/run
+	echo test smash/make_target/test
+fi
+echo ! plan ready

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if isTrue "$MAKE_TARGET_INSTALLED"; then
+	echo "run rm -rf ./target"
+	echo "test [[ ! -d ./target ]] || exit 1"
+fi
