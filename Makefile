@@ -11,18 +11,18 @@ help: ## Prints help for targets with comments
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 docker-build: ## Builds latest docker image
-	docker build --tag smash/smash:latest .
+	docker build --tag $(IMAGE):latest .
 
 on-tag:
-	@git describe --exact-match --tags $$(git log -n1 --pretty='%h')
+	git describe --exact-match --tags $$(git log -n1 --pretty='%h') 1>/dev/null
 
-publish: VERSION = $(shell git describe --always | tr -d v)
+publish: VERSION = $(shell git describe --always --tags | tr -d v)
 publish: MINOR = $(shell echo $(VERSION) | sed -n 's/^\(.\..\).*/\1/p')
 publish: on-tag docker-build ## Push docker image to $(REGISTRY)
-	echo docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
-	echo docker tag $(IMAGE):latest $(IMAGE):$(MINOR)
-	echo docker push $(IMAGE):$(VERSION)
-	echo docker push $(IMAGE):$(MINOR)
-	echo docker rmi $(IMAGE):$(VERSION)
-	echo docker rmi $(IMAGE):$(MINOR)
-	echo docker push $(IMAGE):latest
+	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
+	docker tag $(IMAGE):latest $(IMAGE):$(MINOR)
+	docker push $(IMAGE):$(VERSION)
+	docker push $(IMAGE):$(MINOR)
+	docker rmi $(IMAGE):$(VERSION)
+	docker rmi $(IMAGE):$(MINOR)
+	docker push $(IMAGE):latest

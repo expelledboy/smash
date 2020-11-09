@@ -81,7 +81,7 @@ sudo chmod +x /usr/local/bin/smash
 **docker**
 
 ```
-docker run -it -v "${PWD}:/code" smash/smash:latest -o make_target
+docker run -it -v "${PWD}:/code" expelledboy/smash:latest -o make_target
 ```
 
 ## Guide
