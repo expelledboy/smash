@@ -67,6 +67,23 @@ $ echo $? # winning
 
 And you can write these scripts in any language your heart desired!
 
+## Installation methods
+
+**source**
+
+```
+sudo curl -L --fail \
+  https://raw.githubusercontent.com/expelledboy/smash/master/smash.sh \
+  -o /usr/local/bin/smash
+sudo chmod +x /usr/local/bin/smash
+```
+
+**docker**
+
+```
+docker run -it -v "${PWD}:/code" smash/smash:latest -o make_target
+```
+
 ## Guide
 
 - Your actions must be directories installed in `./smash/<action>`

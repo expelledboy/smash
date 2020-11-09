@@ -1,8 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # strict mode
 set -o errexit -o pipefail -o noclobber -o nounset
 IFS=$'\n\t'
+
+if ! command -v tput >/dev/null; then
+	tput() { :; }
+	export -f tput
+fi
 
 USAGE=$(
 	cat <<-EOF
@@ -25,13 +30,11 @@ function error() { echo "$(tput setaf 1)$*$(tput sgr0)" >&2 && exit 1; }
 
 function find_scripts() {
 	local actions
-
 	if [[ ${2:-} == "--filter" ]]; then
 		actions=$RUN_ONLY
 	else
 		actions=$ACTIONS
 	fi
-
 	for action in $actions; do
 		find "smash/$action/$1" 2>/dev/null
 	done
@@ -52,9 +55,7 @@ function load_state() {
 
 function create_state() {
 	touch "$STATE" && ln -sf "$STATE" "$SMASH_DIR/engine/state"
-
 	for script in $(find_scripts state); do
-		log "------ state running $script"
 		(
 			log "$ $script"
 			output=$($script)
@@ -71,7 +72,6 @@ function create_plan() {
 	echo "plan=$PLAN_DATE" >>"$PLAN"
 
 	for script in $(find_scripts plan --filter); do
-		log "------ plan running $script"
 		(
 			log "$ $script"
 			load_state "$script"
@@ -88,7 +88,6 @@ function run_step() {
 	local step=$1
 	(
 		[[ "$step" == "test" ]] && tap_header && test_count=0
-
 		IFS=" " && awk -F= -v phase="$step" '{
 			n=split($1,script,"/");
 			if (script[n]=="plan" && $2==phase)
