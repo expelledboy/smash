@@ -23,22 +23,27 @@ usage: smash [-anpst] [-o action,..]
 Lets create a simple smash action to install your dotfiles!
 
 ```sh
-# Create action directory
+# Create an action directory
 mkdir -p smash/install_mac
 
-# We are going to need a script to install your dotfiles
-echo 'git clone https://github.com/username/dotfiles.git ~/.dotfiles' > install.sh
-
-# Another to determine if dotfiles are installed
 echo '
 #!/bin/bash
+
+# We are going to need a script to install your dotfiles
+git clone https://github.com/username/dotfiles.git ~/.dotfiles
+' > install.sh
+
+echo '
+#!/bin/bash
+
+# Another to determine if dotfiles are installed
 echo "DOTFILES_INSTALLED=$(test -d ~/.dotfiles && echo true)"
 ' > smash/install_mac/state
 
-# Use that context to plan what must be done to install your dotfiles
 echo '
 #!/bin/bash
 
+# Use that context to plan what must be done to install your dotfiles
 if [[ "$DOTFILES_INSTALLED" != "true" ]]; then
   echo "run bash ./install.sh"
 fi
